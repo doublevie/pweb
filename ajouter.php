@@ -14,19 +14,15 @@ if (!$connected) header('Location: connexion.php');
 <link rel="stylesheet" href="css/style.css">
   <title>Ajouter une annonce</title>
 </head>
-<body>
+<body class="bg-light">
 <?php include 'inc/menu.php'; ?>
 
 
 
 <br>
 
-<div class="alert alert-danger" role="alert" style="display:none">
-Annonce na été pas ajouté
-</div>
-<div class="alert alert-success" role="alert" style="display:none">
-Annonce a été ajouté
-</div>
+
+
 
 <div class="container">
   <div class="card">
@@ -34,6 +30,9 @@ Annonce a été ajouté
       Nouvelle annonce
     </div>
     <div class="card-body">
+      <div class="alert alert-success" role="alert" style="display:none">
+      Annonce a été ajouté
+      </div>
 
       <form id="addann">
 
@@ -52,7 +51,7 @@ print '<option value="'.$i.'">'.$categories[$i].'</option>';
         <hr>
          <div class="form-group">
            <label for="ttle1">Titre</label>
-           <input type="text"  name="titre"  class="form-control" id="ttle1" aria-describedby="emailHelp" placeholder=" Titre de l'annonce">
+           <input type="text" required  name="titre"  class="form-control" id="ttle1" aria-describedby="emailHelp" placeholder=" Titre de l'annonce">
           </div>
 
 
@@ -60,16 +59,20 @@ print '<option value="'.$i.'">'.$categories[$i].'</option>';
 
 <input type="hidden" name="pic" value="">
 <div class="custom-file">
-  <input type="file" class="custom-file-input" id="validatedCustomFile" >
-  <label class="custom-file-label" for="validatedCustomFile">Photo...</label>
+  <input type="file" class="custom-file-input" id="ImageBrowse" >
+  <label class="custom-file-label" for="ImageBrowse">Photo...</label>
   <div class="invalid-feedback">Fichier invalide</div>
+</div>
+
+<div class="">
+<img class="img" alt="">
 </div>
 
 
 <hr>
           <div class="form-group">
              <label for="exampleFormControlTextarea1">Details</label>
-             <textarea class="form-control"  name="details" id="exampleFormControlTextarea1" rows="3"></textarea>
+             <textarea class="form-control" required  name="details" id="exampleFormControlTextarea1" rows="3"></textarea>
            </div>
 
         <button type="submit" class="btn btn-primary">Ajouter l'annonce</button>
@@ -115,10 +118,12 @@ function ajouterAnnonce(){
   title = document.querySelector('[name="titre"]').value ,
   pic = document.querySelector('[name="pic"]').value ,
   details = document.querySelector('[name="details"]').value ;
-console.log(title + ' '+ details + ' '+categ);
+console.log(title + ' '+ details + ' '+categ+' '+pic);
 
 $.post('post/annonce.php',{categ :categ,pic:pic , title:title,details:details},function(dt){
   console.log(dt);
+  showMessage('Votre annonce a été ajouté');
+$('#addann').slideUp()
 });
 
 
@@ -130,7 +135,43 @@ $.post('post/annonce.php',{categ :categ,pic:pic , title:title,details:details},f
 function showMessage(txt) {
   var alrt = $('.alert-success');
   alrt.text(txt);
-  alrt.slideDown('slow').delay(2000).slideUp('slow');
+  alrt.slideDown('slow');
 }
+
+
+
+
+
+
+
+
+$(document).ready(function (e) {
+     $('#ImageBrowse').on('change',(function(e) {
+        e.preventDefault();
+        var formData = new FormData();
+      formData.append('xs', 'fdfdf');
+      formData.append('image', $('#ImageBrowse')[0].files[0]);
+console.log($('#ImageBrowse')[0].files[0]);
+//var formData = new FormData();
+        $.ajax({
+            type:'POST',
+            url: 'post/upload.php',
+            data:formData,
+            cache:false,
+            contentType: false,
+            processData: false,
+            success:function(data){
+                $('input[name="pic"]').val(data);
+                document.querySelector('.img').src = 'post/img/'+data;
+            },
+            error: function(data){
+                console.log('error' +data);
+            }
+        });
+    }));
+
+
+
+});
 </script>
 </html>

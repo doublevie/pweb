@@ -11,8 +11,8 @@ $date = date('Y-m-d H:i');
 
 
 
-$file_db->exec("INSERT INTO annonces (uid,cat,title,details,date)
- VALUES ('$userid','$categ','$title','$details','$date') ;")OR print_r($file_db->errorInfo());
+$file_db->exec("INSERT INTO annonces (uid,cat,title,details,pic,date)
+ VALUES ('$userid','$categ','$title','$details','$pic','$date') ;")OR print_r($file_db->errorInfo());
 $HID =  $file_db->lastInsertId();
 
 print $HID;

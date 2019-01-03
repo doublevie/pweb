@@ -18,7 +18,7 @@
 
 <?php
 for ($i=1; $i <count($categories) ; $i++) {
-  print '<a class="dropdown-item" href="#">'.$categories[$i].'</a>';
+  print '<a class="dropdown-item" href="categories.php?id='.$i.'">'.$categories[$i].'</a>';
 }
 
  ?>
